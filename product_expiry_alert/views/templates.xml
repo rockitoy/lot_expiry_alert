@@ -1,0 +1,92 @@
+<odoo>
+    <data>
+      <!-- Alert mail template -->
+      <record id="expiry_alert_email_template" model="mail.template">
+          <field name="name">Product expiry alert</field>
+          <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+          <field name="subject">Product Expiry (Lot: ${object.name})</field>
+          <field name="email_to">${object.product_id and object.product_id.responsible_id.partner_id.email or ''|safe}</field>
+          <!-- <field name="email_to">${object.user_id and object.user_id.email or ''|safe}</field> -->
+          <field name="lang">${object.lang}</field>
+          <field name="model_id" ref="stock.model_stock_production_lot"/>
+          <field name="auto_delete" eval="True"/>
+	  <field name="body_html">
+            <![CDATA[
+            <!-- <div>
+              %for res in ctx['data']
+              ${res}
+              dddd
+              <div>
+                <p>
+                  sdfasdf
+                </p>
+              </div>
+              %endfor
+            </div> -->
+            <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
+                <table cellspacing="0" cellpadding="0" style="width:600px;border-collapse:collapse;background:inherit;color:inherit">
+                    <tbody><tr>
+                        <td valign="center" width="200" style="padding:10px 10px 10px 5px;font-size: 12px">
+                            <img src="/logo.png" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${user.company_id.name}">
+                        </td>
+                    </tr></tbody>
+                </table>
+            </div>
+            <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
+	      <p>Dear ${object.user_id and object.user_id.name or '' }</p>
+        <p>This is to notify you that the products in lot/serial number <strong>${object.name}</strong> will be expired soon.</p>
+        <p><strong>Product: ${object.product_id.name}</strong></p>
+        <p><strong>Best before: ${object.use_date}</strong></p>
+        <p><strong>End of life date: ${object.life_date}</strong></p>
+        <p><strong>Removal date: ${object.removal_date}</strong></p>
+
+
+
+        <div style="display:table;width:100%;border:1px solid black; ">
+    <div style="display:table-header-group;">
+        <div style="display:table-row;font-weight:bold;background-color:lightgray;">
+            <div style="display:table-cell;border-bottom:1px solid black;border-right:1px solid black;">Location</div>
+            <div class="text-center" style="display:table-cell;text-align:center;border-bottom:1px solid black;">Quantity</div>
+        </div>
+    </div>
+    <div style="display:table-row-group;">
+        % for line in ctx['data']:
+        <div style="display:table-row;">
+            <div style="display:table-cell;border-bottom:1px solid black;border-right:1px solid black;">${line['location']}</div>
+            <div class="text-right" style="display:table-cell;text-align:right;border-bottom:1px solid black;">${line['qty']}</div>
+        </div>
+        % endfor
+    </div>
+    <div style="display:table-row-group;">
+        <div style="display:table-row;background-color:lightgray;">
+            <div style="display:table-cell;border-top:0px solid black;border-right:1px solid black;">Total Quantity</div>
+            <div class="text-right" style="display:table-cell;text-align:right;border-top:0px solid black;">${ctx['total_qty']}</div>
+        </div>
+    </div>
+</div>
+
+
+      </div>
+
+      <div style="padding:0px;width:600px;margin:auto; margin-top: 10px; background: #fff repeat top /100%;color:#777777">
+          ${user.signature | safe}
+          <p style="font-size: 11px; margin-top: 10px;">
+              <strong>Sent by ${user.company_id.name}</strong>
+          </p>
+      </div>]]>
+
+	  </field>
+       </record>
+       <!--
+
+       %if ctx['data']
+        %for res in ctx['data']
+       <tr>
+         <td><span>${res['location']}</td>
+         <td class="text-right"><span>${res['qty']}</td>
+
+       </tr>
+       %endfor
+      %endif -->
+    </data>
+</odoo>
