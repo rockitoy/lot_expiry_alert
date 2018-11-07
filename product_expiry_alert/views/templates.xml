@@ -33,7 +33,7 @@
                 </table>
             </div>
             <div style="padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777">
-	      <p>Dear ${object.user_id and object.user_id.name or '' }</p>
+	      <p>Dear ${object.product_id.responsible_id.partner_id.name or '' }</p>
         <p>This is to notify you that the products in lot/serial number <strong>${object.name}</strong> will be expired soon.</p>
         <p><strong>Product: ${object.product_id.name}</strong></p>
         <p><strong>Best before: ${object.use_date}</strong></p>
